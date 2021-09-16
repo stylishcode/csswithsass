@@ -1,0 +1,162 @@
+# Create .scss file
+
+# Code css on .scss file
+
+# To compile and generate a css file
+  sass css/file.scss css/file.css
+
+# In vscode, you can use Live Sass Compiler extension
+  Ctrl + shift + p and type Live Sass: Watch Sass
+
+# Create variables
+  $variableName: value;
+
+# If you want to create a file but not compile then
+  _file.scss (underscore is necessary)
+  Import then in a scss file with @import 'file' (without .scss extension)
+
+# Chaining
+  # without chaining (css default behavior)
+  .container { color: white }
+  .container p { color: blue }
+
+  # With sass chaining
+  .container {
+    color: white;
+
+    p {
+      color: blue;
+    }
+  }
+
+# Inside of a element style, we have a local scope, and outside, we have global
+  $text-color: blue; (global)
+  .container {
+    $text-color: green; (local scope)
+    p {
+      color: $text-color; (green)
+    }
+  }
+
+# Mixins (group css rules to be reusable)
+  @mixin mixin-name($arguments (optional)) {
+    box-shadow: 2px 2px 4px -2px $arguments
+  }
+
+  #Include mixin 
+  .container {
+  @include box-shadow(rgba(0,0,0,0.6));
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  $text-color: blue;
+
+  p {
+    @include box-shadow(rgba(0, 0, 0, 0.6));
+    background-color: #f00;
+    height: 100px;
+    width: 100px;
+    color: $text-color;
+  }
+}
+
+# Condicionais
+  @mixin text-effect($val) {
+    @if $val == danger {
+      color: #f00;  
+    }
+    @else if $val == alert {
+      color: #ff0;
+    }
+    @else {
+      color: #0f0;
+    }
+  }
+
+  # Using
+    .container {
+    @include box-shadow(rgba(0,0,0,0.6));
+    width: 200px;
+    height: 200px;
+    background-color: white;
+    $text-color: blue;
+
+    p {
+      @include box-shadow(rgba(0, 0, 0, 0.6));
+      background-color: #f00;
+      height: 100px;
+      width: 100px;
+      color: $text-color;
+      # here
+      @include text-effect(danger);
+    }
+
+# Looping
+  # Using for loopings
+    # for $var from startNumber through endNumber
+      @for $i from 1 through 5 {
+        // className in html (text-1, text-2)
+        .text-#{$i} {
+          font-size: 15px * $i
+        }
+      }
+    
+    # for $var from startNumber to endNumber + 1
+      @for $i from 1 to 6 {
+          // className in html (text-1, text-2)
+          .text-#{$i} {
+            font-size: 15px * $i
+          }
+        }
+    
+    # Using forEach looping with key, value collections
+      // color collections (like a array)
+      $colors: (color1: blue, color2: red, color3: yellow)
+
+      @each $key, $color in $colors {
+        .#{$color}-text { color: $color; }
+      }
+
+    # Using forEach looping with value collections only
+      // color collections (like a array)
+      $colors: (blue, red, yellow);
+
+      @each $color in $colors {
+        .#{$color}-text: { color: $color; }
+      } 
+
+# Some functions
+  # Lighten
+    @each $color in $colors {
+      .#{$color}-text: { color: lighten($color, 50); }
+    }
+
+  # Darken 
+    @each $color in $colors {
+      .#{$color}-text: { color: darken($color, 50); }
+    }
+
+# Inheritance
+  .flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  body {
+    // body inherits .flex class 
+    @extend .flex;
+    // You can override inherited rules or add new
+    flex-direction: column;
+    height: 100%;
+  }
+
+# Referencing
+  p {
+    color: red;
+
+    // Referencing p with &
+    &:hover {
+      color: blue;
+    }
+  }
